@@ -22,7 +22,18 @@ ggplot(data = mpg) +
   facet_wrap(~ class, nrow = 2)
 ```
 
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, colour = class))  
+```
 What are the advantages to using faceting instead of the colour aesthetic? What are the disadvantages? How might the balance change if you had a larger dataset?
+
+Advantages to using faceting: each class has own plot, so it is 
+easy to understand the hwy/displ dependence for each class.
+
+Disadvantages to using faceting: we use separate plot for each class, so it could be difficult to analyze the hwy/displ dependence among classes. Colour aesthetic provide us one plot but it is difficult to understand hwy/displ dependence for each class.
+
+The overplotting could be occur due to larger dataset
 
 - Recreate the R code necessary to generate the following graphs.
 
@@ -30,11 +41,52 @@ What are the advantages to using faceting instead of the colour aesthetic? What 
 knitr::include_graphics(paste0("plots/fig", 1:6, ".png"))
 ```
 
-- Most geoms and stats come in pairs that are almost always used in concert. Read through the documentation and make a list of all the pairs. What do they have in common?
+Nb! 
+
+Last plot could not recreate. 
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  geom_smooth(mapping = aes(x = displ, y = hwy), se = FALSE)
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  geom_smooth(mapping = aes(x = displ, y = hwy, group = drv), se = FALSE)
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  geom_smooth(mapping = aes(x = displ, y = hwy, group = drv, colour = drv), se = FALSE)
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, colour = drv)) +
+  geom_smooth(mapping = aes(x = displ, y = hwy), se = FALSE)
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, colour = drv)) +
+  geom_smooth(mapping = aes(x = displ, y = hwy, group = drv, linetype = drv), se = FALSE)
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, group = drv, colour = drv, shape = drv), size = 0.8) +
+   scale_shape_manual(values = c(6:8))
+```
 
 - Compare and contrast geom_jitter() with geom_count().
 
+Geom_jitter()  adds a small amount of random variation to the location of each point, and is a useful way of handling overplotting caused by discreteness in smaller datasets.
+Geom_count()  maps the count to point area. It useful when you have discrete data and overplotting.
+
+```{r}
+ggplot(data = mpg) + 
+  geom_jitter(mapping = aes(x = displ, y = hwy)) 
+ggplot(data = mpg) + 
+  geom_count(mapping = aes(x = displ, y = hwy)) 
+```
+
+
+
 - What does the plot below tell you about the relationship between city and highway mpg (fuel consumption)? Why is coord_fixed() important? What does geom_abline() do?
+
+The plot demonstartes that consumption of petrol on highway is  less than in city. 
+
+Coord_fixed() is important because it represents the number of units on the y-axis equivalent to one unit on the x-axis.
+
+Geom_abline()  adds reference lines  to a plot diagonal. 
+
 
 ```{r}
 ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
@@ -44,6 +96,8 @@ ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
 ```
 
 - What is the default geom associated with stat_summary()?
+
+Geom = "pointrange" that  represents  a vertical interval defined by x, ymin and ymax. Each case draws a single graphical object.
 
 ```{r}
 ggplot(data = diamonds) + 
@@ -57,15 +111,41 @@ ggplot(data = diamonds) +
 
 How could you rewrite the previous plot to use that geom function instead of the stat function?
  
+```{r}
+ggplot(data = diamonds)+
+  geom_pointrange(
+    mapping = aes(x = cut, y = depth),
+    fun.ymin = min, 
+    fun.ymax = max, 
+    fun.y = median, 
+    stat = "summary"
+  )
+```
  
 - What does geom_col() do? How is it different to geom_bar()?
 
-- What variables does stat_smooth() compute? What parameters control its behaviour?
+Geom_col() is a type of chart taht uses stat_identity(): it leaves the data as is.
+
+Geom_bar() makes the height of the bar proportional to the number of cases in each group. If you want the heights of the bars to represent values in the data, use geom_col() instead. geom_bar() uses stat_count() by default: it counts the number of cases at each x position. geom_col() uses stat_identity(): it leaves the data as is.
+
+- What variables does compute stat_smooth ? What parameters control its behaviour?
+
+Stat_smooth computes: y - predicted value, ymin - lower pointwise confidence interval around the mean, ymax - upper pointwise confidence interval around the mean, se - standard error.
 
 - In our proportion bar chart, we need to set group = 1. Why? In other words what is the problem with these two graphs?
+
+We also need to set "group = 1" to get relative proportions of categories in our dataset.
+
 ```{r}
 ggplot(data = diamonds) + 
   geom_bar(mapping = aes(x = cut, y = ..prop..))
 ggplot(data = diamonds) + 
-  geom_bar(mapping = aes(x = cut, fill = color, y = ..prop..))
+  geom_bar(mapping = aes(x = cut, y = ..prop.., fill = clarity))
+```
+
+```{r}
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, y = ..prop.., group = 1))
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, y = ..prop..,  fill = clarity, group = 1))
 ```
