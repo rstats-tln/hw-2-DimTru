@@ -34,7 +34,7 @@ ggplot(data = mpg) +
 
 ![](index_files/figure-markdown_github/unnamed-chunk-3-1.png) What are the advantages to using faceting instead of the colour aesthetic? What are the disadvantages? How might the balance change if you had a larger dataset?
 
-Advantages to using faceting: each class has own plot, so it is easy to understand the hwy/displ dependence for each class.
+Advantages to using faceting: each class has own plot, so it is easy to understand the hwy/displ dependence for each class.All population do not overlap. In case we have not a little data, empty plots could occur.
 
 Disadvantages to using faceting: we use separate plot for each class, so it could be difficult to analyze the hwy/displ dependence among classes. Colour aesthetic provide us one plot but it is difficult to understand hwy/displ dependence for each class.
 
@@ -74,7 +74,7 @@ ggplot(data = mpg) +
 
 ``` r
 ggplot(data = mpg) + 
-  geom_point(mapping = aes(x = displ, y = hwy)) +
+  geom_point(mapping = aes(x = displ, y = hwy, colour = drv )) +
   geom_smooth(mapping = aes(x = displ, y = hwy, group = drv, colour = drv), se = FALSE)
 ```
 
@@ -103,16 +103,25 @@ ggplot(data = mpg) +
 ![](index_files/figure-markdown_github/unnamed-chunk-5-5.png)
 
 ``` r
-ggplot(data = mpg) + 
-  geom_point(mapping = aes(x = displ, y = hwy, group = drv, colour = drv, shape = drv), size = 0.8) +
-   scale_shape_manual(values = c(6:8))
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(size = 4, colour = "white") +
+  geom_point(aes(colour = drv))
 ```
 
 ![](index_files/figure-markdown_github/unnamed-chunk-5-6.png)
 
+``` r
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, fill = drv)) + 
+  geom_point(shape = 21, stroke = 1.5, colour = "white") 
+```
+
+![](index_files/figure-markdown_github/unnamed-chunk-5-7.png)
+
 -   Compare and contrast geom\_jitter() with geom\_count().
 
-Geom\_jitter() adds a small amount of random variation to the location of each point, and is a useful way of handling overplotting caused by discreteness in smaller datasets. Geom\_count() maps the count to point area. It useful when you have discrete data and overplotting.
+Geom\_jitter() adds a small amount of random variation to the location of each point, and is a useful way of handling overplotting caused by discreteness in smaller datasets.
+
+Geom\_count() maps the count to point area. It useful when you have discrete data and overplotting.
 
 ``` r
 ggplot(data = mpg) + 
@@ -130,7 +139,7 @@ ggplot(data = mpg) +
 
 -   What does the plot below tell you about the relationship between city and highway mpg (fuel consumption)? Why is coord\_fixed() important? What does geom\_abline() do?
 
-The plot demonstartes that consumption of petrol on highway is less than in city.
+The plot demonstartes that consumption of petrol on highway is less than in city. Auto saab pikkema distantsi syita maanteel.
 
 Coord\_fixed() is important because it represents the number of units on the y-axis equivalent to one unit on the x-axis.
 
@@ -147,7 +156,7 @@ ggplot(data = mpg, mapping = aes(x = cty, y = hwy)) +
 
 -   What is the default geom associated with stat\_summary()?
 
-Geom = "pointrange" that represents a vertical interval defined by x, ymin and ymax. Each case draws a single graphical object.
+Geom = "geom\_pointrange" that represents a vertical interval defined by x, ymin and ymax. Each case draws a single graphical object.
 
 ``` r
 ggplot(data = diamonds) + 
@@ -180,7 +189,7 @@ ggplot(data = diamonds)+
 
 Geom\_col() is a type of chart taht uses stat\_identity(): it leaves the data as is.
 
-Geom\_bar() makes the height of the bar proportional to the number of cases in each group. If you want the heights of the bars to represent values in the data, use geom\_col() instead. geom\_bar() uses stat\_count() by default: it counts the number of cases at each x position. geom\_col() uses stat\_identity(): it leaves the data as is.
+Geom\_bar() makes the height of the bar proportional to the number of cases in each group. If you want the heights of the bars to represent values in the data, use geom\_col() instead. geom\_bar() uses stat\_count() by default: it counts the number of cases at each x position.
 
 -   What variables does compute stat\_smooth ? What parameters control its behaviour?
 
@@ -213,7 +222,7 @@ ggplot(data = diamonds) +
 
 ``` r
 ggplot(data = diamonds) + 
-  geom_bar(mapping = aes(x = cut, y = ..prop..,  fill = clarity, group = 1))
+  geom_bar(mapping = aes(x = cut, y = ..prop..,  fill = clarity, group = clarity))
 ```
 
 ![](index_files/figure-markdown_github/unnamed-chunk-11-2.png)
