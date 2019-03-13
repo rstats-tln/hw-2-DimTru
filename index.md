@@ -84,8 +84,8 @@ ggplot(data =mpg) +
 
 ``` r
 ggplot(data = mpg) + 
-  geom_point(mapping = aes(x = displ, y = hwy, colour = drv)) +
-  geom_smooth(mapping = aes(x = displ, y = hwy), se = FALSE)
+  geom_point(mapping = aes(x = displ, y = hwy, colour = drv )) +
+  geom_smooth(mapping = aes(x = displ, y = hwy, group = drv, colour = drv), se = FALSE)
 ```
 
     ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
@@ -95,7 +95,7 @@ ggplot(data = mpg) +
 ``` r
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy, colour = drv)) +
-  geom_smooth(mapping = aes(x = displ, y = hwy, group = drv, linetype = drv), se = FALSE)
+  geom_smooth(mapping = aes(x = displ, y = hwy), se = FALSE)
 ```
 
     ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
@@ -103,19 +103,29 @@ ggplot(data = mpg) +
 ![](index_files/figure-markdown_github/unnamed-chunk-5-5.png)
 
 ``` r
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, colour = drv)) +
+  geom_smooth(mapping = aes(x = displ, y = hwy, group = drv, linetype = drv), se = FALSE)
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+![](index_files/figure-markdown_github/unnamed-chunk-5-6.png)
+
+``` r
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
   geom_point(size = 4, colour = "white") +
   geom_point(aes(colour = drv))
 ```
 
-![](index_files/figure-markdown_github/unnamed-chunk-5-6.png)
+![](index_files/figure-markdown_github/unnamed-chunk-5-7.png)
 
 ``` r
 ggplot(data = mpg, mapping = aes(x = displ, y = hwy, fill = drv)) + 
   geom_point(shape = 21, stroke = 1.5, colour = "white") 
 ```
 
-![](index_files/figure-markdown_github/unnamed-chunk-5-7.png)
+![](index_files/figure-markdown_github/unnamed-chunk-5-8.png)
 
 -   Compare and contrast geom\_jitter() with geom\_count().
 
