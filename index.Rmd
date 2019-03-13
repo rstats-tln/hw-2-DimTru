@@ -83,6 +83,7 @@ Geom_count()  maps the count to point area. It useful when you have discrete dat
 ```{r}
 ggplot(data = mpg) + 
   geom_jitter(mapping = aes(x = displ, y = hwy)) 
+
 ggplot(data = mpg) + 
   geom_count(mapping = aes(x = displ, y = hwy)) 
 ```
@@ -149,6 +150,7 @@ We also need to set "group = 1" to get relative proportions of categories in our
 ```{r}
 ggplot(data = diamonds) + 
   geom_bar(mapping = aes(x = cut, y = ..prop..))
+
 ggplot(data = diamonds) + 
   geom_bar(mapping = aes(x = cut, y = ..prop.., fill = clarity))
 ```
